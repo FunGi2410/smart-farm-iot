@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "114938152308",
+    "project_id": "smart-farm-97435",
+    "storage_bucket": "smart-farm-97435.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114938152308:android:896795ccceff7cf1459821",
+        "android_client_info": {
+          "package_name": "com.example.smart_farm_iot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCc9ny0I5Xp9egR1LyUUI6VriwxfN4EJDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
