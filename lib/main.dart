@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'view_models/home_view_model.dart';
 import 'views/home_screen.dart';
 import 'views/inventory_screen.dart';
 
@@ -9,12 +11,15 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Bottom Navigation Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: BottomNavScreen(),
+    return ChangeNotifierProvider(
+      create: (context) => HomeViewModel(),
+      child: MaterialApp(
+        title: 'Smart Farm',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: BottomNavScreen(),
+      )
     );
   }
 }
@@ -42,7 +47,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bottom Navigation Example'),
+        title: Text('Smart Farm'),
       ),
       body: _screens[_selectedIndex], 
       bottomNavigationBar: BottomNavigationBar(
