@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:smart_farm_iot/models/job.dart';
 import '../models/area.dart';
-import '../services/database_helper.dart';
 import 'dart:math';
 
 class HomeViewModel extends ChangeNotifier {
-  final DatabaseHelper _databaseHelper = DatabaseHelper();
   Random random = Random();
 
   List<Area> _areas = [];
@@ -18,18 +17,16 @@ class HomeViewModel extends ChangeNotifier {
       img: '',
     );
     areas.add(area);
-    // await _databaseHelper.insertArea(Area);
-    // layareas();
-    notifyListeners();
-  }
-
-  Future<void> getAreas() async {
-    _areas = await _databaseHelper.getAreas();
     notifyListeners();
   }
 
   void removeArea(int index) {
     areas.removeAt(index);
+    notifyListeners();
+  }
+
+  void addJobToArea(int areaIndex, String name, String notes, DateTime date) {
+    areas[areaIndex].jobs.add(Job(name: name, notes: notes, date: date));
     notifyListeners();
   }
 }

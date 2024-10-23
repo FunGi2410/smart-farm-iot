@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_farm_iot/view_models/job_view_model.dart';
 import 'view_models/home_view_model.dart';
 import 'views/home_screen.dart';
 import 'views/inventory_screen.dart';
@@ -11,8 +12,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => HomeViewModel(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => HomeViewModel()),
+        ChangeNotifierProvider(create: (context) => JobViewModel()),
+      ],
       child: MaterialApp(
         title: 'Smart Farm',
         theme: ThemeData(

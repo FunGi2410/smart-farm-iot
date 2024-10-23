@@ -1,6 +1,5 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../models/area.dart';
 
 class DatabaseHelper {
   static const _databaseName = 'khu_vuc_database.db';
@@ -45,19 +44,5 @@ class DatabaseHelper {
         $_columnAnh TEXT
       )
     ''');
-  }
-
-  Future<void> insertArea(Area area) async {
-    final db = await this.db;
-    await db.insert(_table, area.toMap());
-  }
-
-  Future<List<Area>> getAreas() async {
-    final db = await this.db;
-    final List<Map<String, dynamic>> maps = await db.query(_table);
-
-    return List.generate(maps.length, (i) {
-      return Area.fromMap(maps[i]);
-    });
   }
 }
