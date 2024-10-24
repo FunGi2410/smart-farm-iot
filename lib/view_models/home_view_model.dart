@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:smart_farm_iot/models/device.dart';
+import 'package:smart_farm_iot/models/employee.dart';
 import 'package:smart_farm_iot/models/job.dart';
 import '../models/area.dart';
 import 'dart:math';
 
 class HomeViewModel extends ChangeNotifier {
+  HomeViewModel() {
+    //================ TEST =====================
+    addArea(
+      'An Giang',
+      'Lúa',
+    );
+
+    areas[0].employees = [
+      Employee(name: 'Nhân viên 1', date: DateTime.now()),
+      Employee(name: 'Nhân viên 2', date: DateTime.now()),
+      Employee(name: 'Nhân viên 3', date: DateTime.now()),
+      Employee(name: 'Nhân viên 4', date: DateTime.now()),
+      Employee(name: 'Nhân viên 5', date: DateTime.now()),
+    ];
+  }
+
   Random random = Random();
 
   List<Area> _areas = [];
@@ -15,6 +33,10 @@ class HomeViewModel extends ChangeNotifier {
       nameArea: nameArea,
       namePlant: namePlant,
       img: '',
+      devices: [
+        Device(name: 'Bơm nước'),
+        Device(name: 'Đèn sưởi'),
+      ],
     );
     areas.add(area);
     notifyListeners();

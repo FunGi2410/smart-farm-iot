@@ -2,7 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_farm_iot/view_models/home_view_model.dart';
+import 'package:smart_farm_iot/views/control_screen.dart';
+import 'package:smart_farm_iot/views/employee_screen.dart';
 import 'package:smart_farm_iot/views/job_screen.dart';
+import 'package:smart_farm_iot/views/monitoring_screen.dart';
 
 class AreaDetailScreen extends StatelessWidget {
   final int areaIndex;
@@ -27,9 +30,30 @@ class AreaDetailScreen extends StatelessWidget {
               ),
             );
           }),
-          _buildCard('Điều Khiển', Icons.settings),
-          _buildCard('Giám Sát', Icons.visibility),
-          _buildCard('Nhân Viên', Icons.people),
+          _buildCard('Điều Khiển', Icons.settings, () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ControlScreen(area: area),
+              ),
+            );
+          }),
+          _buildCard('Giám Sát', Icons.visibility, () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MonitoringScreen(area: area),
+              ),
+            );
+          }),
+          _buildCard('Nhân Viên', Icons.people, () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EmployeeScreen(area: area),
+              ),
+            );
+          }),
         ],
       ),
     );

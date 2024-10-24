@@ -7,7 +7,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<HomeViewModel>(context);
-    
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
