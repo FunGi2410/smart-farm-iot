@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_farm_iot/view_models/job_view_model.dart';
+import 'package:smart_farm_iot/views/auth/login_screen.dart';
+import 'package:smart_farm_iot/views/auth/register_screen.dart';
 import 'view_models/home_view_model.dart';
 import 'views/home_screen.dart';
 import 'views/inventory_screen.dart';
@@ -18,11 +20,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => JobViewModel()),
       ],
       child: MaterialApp(
-        title: 'Smart Farm',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: BottomNavScreen(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => LoginScreen(),
+          '../views/auth/register_screen.dart': (context) => RegisterScreen(),
+          '../main.dart': (context) => BottomNavScreen(),
+        },
+        //home: BottomNavScreen(),
       )
     );
   }
