@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_farm_iot/view_models/job_view_model.dart';
+import 'package:smart_farm_iot/view_models/login_view_model.dart';
+import 'package:smart_farm_iot/view_models/register_view_model.dart';
 import 'package:smart_farm_iot/views/auth/login_screen.dart';
 import 'package:smart_farm_iot/views/auth/register_screen.dart';
 import 'view_models/home_view_model.dart';
@@ -17,7 +19,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => HomeViewModel()),
-        ChangeNotifierProvider(create: (context) => JobViewModel()),
+        //ChangeNotifierProvider(create: (context) => JobViewModel()),
+        ChangeNotifierProvider(create: (context) => LoginViewModel()),
+        ChangeNotifierProvider(create: (context) => RegisterViewModel()),
       ],
       child: MaterialApp(
         initialRoute: '/',

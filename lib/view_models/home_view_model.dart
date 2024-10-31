@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:smart_farm_iot/models/device.dart';
 import 'package:smart_farm_iot/models/employee.dart';
 import 'package:smart_farm_iot/models/job.dart';
 import '../models/area.dart';
 import 'dart:math';
+import 'package:http/http.dart' as http;
 
 class HomeViewModel extends ChangeNotifier {
   HomeViewModel() {
@@ -42,13 +45,52 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeArea(int index) {
+  void removeArea(int index, var areasDb) {
     areas.removeAt(index);
+
+    // update to database
+    
+    var url = 'http://192.168.5.101/web/deletekhuvuc.php';
+    http.post(
+      Uri.parse(url),
+      body: {
+        'id': areasDb[index]['id'],
+      },
+    ).then((response) {
+      areasDb.removeAt(index);
+      debugPrint('Delete Clicked');
+    });
     notifyListeners();
+  }
+
+  Future getDataArea() async {
+    var url = 'http://192.168.5.101/web/get_khuvuc.php';
+    var response = await http.get(Uri.parse(url));
+    return json.decode(response.body);
   }
 
   void addJobToArea(int areaIndex, String name, String notes, DateTime date) {
     areas[areaIndex].jobs.add(Job(name: name, notes: notes, date: date));
     notifyListeners();
+  }
+
+  void addAreaToDatabase(String nameArea, String namePlant) {
+    var url = 'http://192.168.5.101/web/add_khuvuc.php';
+
+    http.post(Uri.parse(url), body: {
+      'makhuvuc': "234",
+      'tenkhuvuc': nameArea,
+      'tencaytrong': namePlant,
+      'diachi': "234",
+    }).then((response) {
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      
+      if (response.statusCode == 200) {
+        print('Operation successful');
+      } else {
+        print('Operation failed');
+      }
+    });
   }
 }
