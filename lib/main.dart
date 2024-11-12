@@ -24,13 +24,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => RegisterViewModel()),
       ],
       child: MaterialApp(
-        initialRoute: '/',
-        routes: {
-          '/': (context) => LoginScreen(),
-          '../views/auth/register_screen.dart': (context) => RegisterScreen(),
-          '../main.dart': (context) => BottomNavScreen(),
-        },
-        //home: BottomNavScreen(),
+        // initialRoute: '/',
+        // routes: {
+        //   '/': (context) => LoginScreen(),
+        //   '../views/auth/register_screen.dart': (context) => RegisterScreen(),
+        //   '../main.dart': (context) => BottomNavScreen(),
+        // },
+        home: BottomNavScreen(),
       )
     );
   }
@@ -58,9 +58,9 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Smart Farm'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Smart Farm'),
+      // ),
       body: _screens[_selectedIndex], 
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

@@ -16,57 +16,174 @@ class HomeScreen extends StatelessWidget {
         child: Icon(Icons.add),
       ),
 
-      appBar: AppBar(title: Text('Home')),
-      body: FutureBuilder(
-        future: viewModel.getDataArea(),
-        builder: (context, snapshot){
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || (snapshot.data as List).isEmpty) {
-            return Center(child: Text('Unavailable data'));
-          } else{
-            var data = snapshot.data as List;
-            return ListView.builder(
-              itemCount: viewModel.areas.length,
-              itemBuilder: (context, index) {
-                final area = viewModel.areas[index];
-                return Card(
-                  child: Column(  
-                    mainAxisSize: MainAxisSize.min,  
-                    children: <Widget>[  
-                        ListTile(  
-                        leading: Icon(Icons.album, size: 45),  
-                        title: Text(area.nameArea),  
-                        subtitle: Text(area.namePlant), 
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            viewModel.removeArea(index, data);
-                          },
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AreaDetailScreen(areaIndex: index),
+      //appBar: AppBar(title: Text('Home')),
+      body: Column(
+        children: [
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 300,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: const AssetImage("assets/imgs/top_bg.jpg"),
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(0.5),
+                      BlendMode.dstATop,
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 160,
+                left: 0,
+                right: 0,
+                child: Container(
+                    height: 600,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Tìm kiếm...',
+                              hintStyle:
+                                  const TextStyle(color: Color(0xFFCFCACA)),
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.8),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(90),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFCFCACA),
+                                  width: 1.0,
+                                ),
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                color: Color(0xFFCFCACA),
+                              ),
                             ),
-                          );
-                        }, 
-                      ),  
-                    ],  
-                  ),  
-                );
-              },
-            );
-          }
-        },
+                          ),
+                        ),
+                        Expanded(
+                          child: FutureBuilder(
+                            future: viewModel.getDataArea(),
+                            builder: (context, snapshot) {
+                              // if (snapshot.connectionState ==
+                              //     ConnectionState.waiting) {
+                              //   return Center(
+                              //       child: CircularProgressIndicator());
+                              // } else if (snapshot.hasError) {
+                              //   return Center(
+                              //       child: Text('Error: ${snapshot.error}'));
+                              // } else if (!snapshot.hasData ||
+                              //     (snapshot.data as List).isEmpty) {
+                              //   return Center(child: Text('Unavailable data'));
+                              // } 
+                              if(true) {
+                                //var data = snapshot.data as List;
+                                List<int> data = [1, 2, 5, 9];
+                                return ListView.builder(
+                                  itemCount: viewModel.areas.length,
+                                  itemBuilder: (context, index) {
+                                    final area = viewModel.areas[index];
+                                    return Card(
+                                      child: Row(
+                                        children: [
+                                          Image.asset(
+                                            "assets/imgs/top_bg.jpg",
+                                            width: 80,
+                                            height: 80,
+                                            fit: BoxFit.contain,
+                                          ),
+                                          SizedBox(width: 10.0),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                area.nameArea,
+                                                style: TextStyle(
+                                                  fontSize: 18.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                area.namePlant,
+                                                style: TextStyle(
+                                                  fontSize: 16.0,
+                                                  color: Colors.grey[600],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                        )
+                      ],
+                    )),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 
-  void _showAddAreaDialog(BuildContext context, HomeViewModel viewModel){
+  Widget buildCard(String regionName, String treeName, String imagePath) {
+    return Card(
+      margin: EdgeInsets.all(10.0),
+      elevation: 5.0,
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            Image.asset(
+              imagePath,
+              width: 100.0,
+              height: 100.0,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(width: 10.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  regionName,
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  treeName,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showAddAreaDialog(BuildContext context, HomeViewModel viewModel) {
     final tenKhuVucController = TextEditingController();
     final loaiCayTrongController = TextEditingController();
     showDialog(
