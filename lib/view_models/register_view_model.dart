@@ -10,11 +10,6 @@ class RegisterViewModel with ChangeNotifier {
   final TextEditingController emailController = TextEditingController();
 
   Future<void> registerUser(BuildContext context) async {
-    if (usernameController.text.isEmpty || emailController.text.isEmpty || passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Vui lòng điền đầy đủ thông tin')));
-      return;
-    }
-
     final response = await http.post(
       Uri.parse('http://192.168.5.101/doan/register.php'),
       body: {
@@ -24,18 +19,42 @@ class RegisterViewModel with ChangeNotifier {
       },
     );
 
-    print("Register Response Status Code: ${response.statusCode}");
-    print("Register Response Body: ${response.body}");
-
-    var data = json.decode(response.body);
-    if (data['status'] == 'success') {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Đăng ký thành công')));
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data['message'])));
+    final responseData = json.decode(response.body);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(responseData['message'])),
+    );
+    if (responseData['status'] == 'success') {
+      Navigator.pop(context);
     }
   }
+
+  // Future<void> registerUser(BuildContext context) async {
+  //   if (usernameController.text.isEmpty || emailController.text.isEmpty || passwordController.text.isEmpty) {
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Vui lòng điền đầy đủ thông tin')));
+  //     return;
+  //   }
+
+  //   final response = await http.post(
+  //     Uri.parse('http://192.168.5.101/doan/register.php'),
+  //     body: {
+  //       'username': usernameController.text,
+  //       'password': passwordController.text,
+  //       'email': emailController.text,
+  //     },
+  //   );
+
+  //   print("Register Response Status Code: ${response.statusCode}");
+  //   print("Register Response Body: ${response.body}");
+
+  //   var data = json.decode(response.body);
+  //   if (data['status'] == 'success') {
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Đăng ký thành công')));
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => LoginScreen()),
+  //     );
+  //   } else {
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data['message'])));
+  //   }
+  // }
 }

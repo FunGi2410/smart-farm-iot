@@ -85,7 +85,7 @@ class HomeViewModel extends ChangeNotifier {
 
     http.post(Uri.parse(url), body: {
       'user_id': userId,
-      'makhuvuc': "598",
+      'makhuvuc': "666",
       'tenkhuvuc': nameArea,
       'tencaytrong': namePlant,
       'diachi': "234",
