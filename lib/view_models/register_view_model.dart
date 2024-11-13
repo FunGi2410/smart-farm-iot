@@ -16,7 +16,7 @@ class RegisterViewModel with ChangeNotifier {
     }
 
     final response = await http.post(
-      Uri.parse('http://192.168.5.101/web/register.php'),
+      Uri.parse('http://192.168.5.101/doan/register.php'),
       body: {
         'username': usernameController.text,
         'password': passwordController.text,

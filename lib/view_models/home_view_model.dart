@@ -9,28 +9,30 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 
 class HomeViewModel extends ChangeNotifier {
-  HomeViewModel() {
-    //================ TEST =====================
-    addArea(
-      'An Giang',
-      'Lúa',
-    );
+  // HomeViewModel() {
+  //   //================ TEST =====================
+  //   addArea(
+  //     'An Giang',
+  //     'Lúa',
+  //   );
 
-    areas[0].employees = [
-      Employee(name: 'Nhân viên 1', date: DateTime.now()),
-      Employee(name: 'Nhân viên 2', date: DateTime.now()),
-      Employee(name: 'Nhân viên 3', date: DateTime.now()),
-      Employee(name: 'Nhân viên 4', date: DateTime.now()),
-      Employee(name: 'Nhân viên 5', date: DateTime.now()),
-    ];
-  }
+  //   areas[0].employees = [
+  //     Employee(name: 'Nhân viên 1', date: DateTime.now()),
+  //     Employee(name: 'Nhân viên 2', date: DateTime.now()),
+  //     Employee(name: 'Nhân viên 3', date: DateTime.now()),
+  //     Employee(name: 'Nhân viên 4', date: DateTime.now()),
+  //     Employee(name: 'Nhân viên 5', date: DateTime.now()),
+  //   ];
+  // }
 
   Random random = Random();
 
   List<Area> _areas = [];
   List<Area> get areas => _areas;
 
-  Future<void> addArea(String nameArea, String namePlant) async {
+  Future<void> addArea(String nameArea, String namePlant, String userId) async {
+    addAreaToDatabase(nameArea, namePlant, userId);
+
     Area area = Area(
       id: random.nextInt(100),
       nameArea: nameArea,
@@ -49,7 +51,6 @@ class HomeViewModel extends ChangeNotifier {
     areas.removeAt(index);
 
     // update to database
-    
     var url = 'http://192.168.5.101/web/deletekhuvuc.php';
     http.post(
       Uri.parse(url),
@@ -63,10 +64,15 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future getDataArea() async {
-    var url = 'http://192.168.5.101/web/get_khuvuc.php';
-    var response = await http.get(Uri.parse(url));
-    return json.decode(response.body);
+  Future<List> getDataArea(int userId) async {
+    final response = await http.get(Uri.parse('http://192.168.5.101/doan/getkhuvuc.php?user_id=$userId'));
+
+    if (response.statusCode == 200) {
+      List data = json.decode(response.body);
+      return data;
+    } else {
+      throw Exception('Failed to load khu vuc');
+    }
   }
 
   void addJobToArea(int areaIndex, String name, String notes, DateTime date) {
@@ -74,11 +80,12 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addAreaToDatabase(String nameArea, String namePlant) {
-    var url = 'http://192.168.5.101/web/add_khuvuc.php';
+  void addAreaToDatabase(String nameArea, String namePlant, String userId) {
+    var url = 'http://192.168.5.101/doan/addkhuvuc.php';
 
     http.post(Uri.parse(url), body: {
-      'makhuvuc': "234",
+      'user_id': userId,
+      'makhuvuc': "598",
       'tenkhuvuc': nameArea,
       'tencaytrong': namePlant,
       'diachi': "234",

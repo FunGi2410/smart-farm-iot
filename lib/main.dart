@@ -24,13 +24,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => RegisterViewModel()),
       ],
       child: MaterialApp(
-        // initialRoute: '/',
-        // routes: {
-        //   '/': (context) => LoginScreen(),
-        //   '../views/auth/register_screen.dart': (context) => RegisterScreen(),
-        //   '../main.dart': (context) => BottomNavScreen(),
-        // },
-        home: BottomNavScreen(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => LoginScreen(),
+          '../views/auth/register_screen.dart': (context) => RegisterScreen(),
+          '../main.dart': (context) => BottomNavScreen(),
+        },
+        //home: BottomNavScreen(),
       )
     );
   }
@@ -45,7 +45,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    HomeScreen(),
+    HomeScreen(userId: 0),
     InventoryScreen(),
   ];
 

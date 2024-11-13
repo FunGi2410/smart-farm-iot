@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import 'area_detail_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+  final int userId; 
+  HomeScreen({required this.userId});
+
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<HomeViewModel>(context);
@@ -75,26 +78,25 @@ class HomeScreen extends StatelessWidget {
                         ),
                         Expanded(
                           child: FutureBuilder(
-                            future: viewModel.getDataArea(),
+                            future: viewModel.getDataArea(userId),
                             builder: (context, snapshot) {
-                              // if (snapshot.connectionState ==
-                              //     ConnectionState.waiting) {
-                              //   return Center(
-                              //       child: CircularProgressIndicator());
-                              // } else if (snapshot.hasError) {
-                              //   return Center(
-                              //       child: Text('Error: ${snapshot.error}'));
-                              // } else if (!snapshot.hasData ||
-                              //     (snapshot.data as List).isEmpty) {
-                              //   return Center(child: Text('Unavailable data'));
-                              // } 
-                              if(true) {
-                                //var data = snapshot.data as List;
-                                List<int> data = [1, 2, 5, 9];
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                    child: Text('Error: ${snapshot.error}'));
+                              } else if (!snapshot.hasData ||
+                                  (snapshot.data as List).isEmpty) {
+                                return Center(child: Text('Unavailable data'));
+                              } 
+                              else{
+                                var data = snapshot.data as List;
                                 return ListView.builder(
-                                  itemCount: viewModel.areas.length,
+                                  itemCount: data.length,
                                   itemBuilder: (context, index) {
-                                    final area = viewModel.areas[index];
+                                    final area = data[index];
                                     return Card(
                                       child: Row(
                                         children: [
@@ -109,14 +111,14 @@ class HomeScreen extends StatelessWidget {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                area.nameArea,
+                                                area['tenkhuvuc'],
                                                 style: TextStyle(
                                                   fontSize: 18.0,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                               Text(
-                                                area.namePlant,
+                                                area['tencaytrong'],
                                                 style: TextStyle(
                                                   fontSize: 16.0,
                                                   color: Colors.grey[600],
@@ -215,11 +217,12 @@ class HomeScreen extends StatelessWidget {
                 viewModel.addArea(
                   tenKhuVucController.text,
                   loaiCayTrongController.text,
+                  userId.toString(),
                 );
-                viewModel.addAreaToDatabase(
-                  tenKhuVucController.text,
-                  loaiCayTrongController.text,
-                );
+                // viewModel.addAreaToDatabase(
+                //   tenKhuVucController.text,
+                //   loaiCayTrongController.text,
+                // );
                 Navigator.pop(context);
               },
               child: Text('Thêm'),
