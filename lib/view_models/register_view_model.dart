@@ -11,7 +11,7 @@ class RegisterViewModel with ChangeNotifier {
 
   Future<void> registerUser(BuildContext context) async {
     final response = await http.post(
-      Uri.parse('http://192.168.5.101/doan/register.php'),
+      Uri.parse('http://192.168.1.3/doan/register.php'),
       body: {
         'username': usernameController.text,
         'password': passwordController.text,

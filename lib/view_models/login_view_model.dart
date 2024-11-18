@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:smart_farm_iot/main.dart';
 import 'dart:convert';
-
-import 'package:smart_farm_iot/views/home_screen.dart';
 
 class LoginViewModel with ChangeNotifier {
   final TextEditingController usernameController = TextEditingController();
@@ -10,7 +9,7 @@ class LoginViewModel with ChangeNotifier {
 
   Future<void> loginUser(BuildContext context) async {
     final response = await http.post(
-      Uri.parse('http://192.168.5.101/doan/login.php'),
+      Uri.parse('http://192.168.1.3/doan/login.php'),
       body: {
         'username': usernameController.text,
         'password': passwordController.text,
@@ -21,7 +20,7 @@ class LoginViewModel with ChangeNotifier {
     if (responseData['status'] == 'success') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen(userId: responseData['user_id'])),
+        MaterialPageRoute(builder: (context) => BottomNavScreen(userId: responseData['user_id'])),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

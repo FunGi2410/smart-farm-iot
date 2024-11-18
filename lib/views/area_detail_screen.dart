@@ -9,7 +9,10 @@ import 'package:smart_farm_iot/views/monitoring_screen.dart';
 
 class AreaDetailScreen extends StatelessWidget {
   final int areaIndex;
-  AreaDetailScreen({required this.areaIndex});
+  final String makhuvuc;
+  final int userId;
+
+  AreaDetailScreen({required this.areaIndex, required this.makhuvuc, required this.userId});
 
   @override
   Widget build(BuildContext context) {

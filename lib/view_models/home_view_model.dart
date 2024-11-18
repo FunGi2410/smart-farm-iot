@@ -47,25 +47,28 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeArea(int index, var areasDb) {
-    areas.removeAt(index);
-
-    // update to database
-    var url = 'http://192.168.5.101/web/deletekhuvuc.php';
-    http.post(
-      Uri.parse(url),
+  Future<void> removeArea(String makhuvuc, BuildContext context) async {
+    final response = await http.post(
+      Uri.parse('http://192.168.1.3/doan/deletekhuvuc.php'),
       body: {
-        'id': areasDb[index]['id'],
+        'makhuvuc': makhuvuc,
       },
-    ).then((response) {
-      areasDb.removeAt(index);
-      debugPrint('Delete Clicked');
-    });
+    );
+
+    final responseData = json.decode(response.body);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(responseData['message'])),
+    );
+
+    if (responseData['status'] == 'success') {
+      print("delete success");
+    }
+
     notifyListeners();
   }
 
   Future<List> getDataArea(int userId) async {
-    final response = await http.get(Uri.parse('http://192.168.5.101/doan/getkhuvuc.php?user_id=$userId'));
+    final response = await http.get(Uri.parse('http://192.168.1.3/doan/getkhuvuc.php?user_id=$userId'));
 
     if (response.statusCode == 200) {
       List data = json.decode(response.body);
@@ -81,11 +84,11 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void addAreaToDatabase(String nameArea, String namePlant, String userId) {
-    var url = 'http://192.168.5.101/doan/addkhuvuc.php';
+    var url = 'http://192.168.1.3/doan/addkhuvuc.php';
 
     http.post(Uri.parse(url), body: {
       'user_id': userId,
-      'makhuvuc': "666",
+      'makhuvuc': random.nextInt(100).toString(),
       'tenkhuvuc': nameArea,
       'tencaytrong': namePlant,
       'diachi': "234",

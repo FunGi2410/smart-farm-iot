@@ -19,31 +19,43 @@ class HomeScreen extends StatelessWidget {
         child: Icon(Icons.add),
       ),
 
-      //appBar: AppBar(title: Text('Home')),
       body: Column(
         children: [
           Stack(
             clipBehavior: Clip.none,
             children: [
               Container(
-                height: 300,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: const AssetImage("assets/imgs/top_bg.jpg"),
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.5),
-                      BlendMode.dstATop,
+                height: MediaQuery.of(context).size.height - kBottomNavigationBarHeight - 36,
+                decoration: const BoxDecoration(
+                  color: Colors.yellow,
+                ),
+              ),
+
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: const AssetImage("assets/imgs/top_bg.jpg"),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(1),
+                        BlendMode.dstATop,
+                      ),
                     ),
                   ),
                 ),
               ),
+
               Positioned(
-                top: 160,
+                top: 150,
                 left: 0,
                 right: 0,
                 child: Container(
-                    height: 600,
+                    height: MediaQuery.of(context).size.height,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -97,38 +109,7 @@ class HomeScreen extends StatelessWidget {
                                   itemCount: data.length,
                                   itemBuilder: (context, index) {
                                     final area = data[index];
-                                    return Card(
-                                      child: Row(
-                                        children: [
-                                          Image.asset(
-                                            "assets/imgs/top_bg.jpg",
-                                            width: 80,
-                                            height: 80,
-                                            fit: BoxFit.contain,
-                                          ),
-                                          SizedBox(width: 10.0),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                area['tenkhuvuc'],
-                                                style: TextStyle(
-                                                  fontSize: 18.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              Text(
-                                                area['tencaytrong'],
-                                                style: TextStyle(
-                                                  fontSize: 16.0,
-                                                  color: Colors.grey[600],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    );
+                                    return _buildCard(index, area, viewModel, context);
                                   },
                                 );
                               }
@@ -145,43 +126,28 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget buildCard(String regionName, String treeName, String imagePath) {
-    return Card(
-      margin: EdgeInsets.all(10.0),
-      elevation: 5.0,
-      child: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            Image.asset(
-              imagePath,
-              width: 100.0,
-              height: 100.0,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(width: 10.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  regionName,
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  treeName,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+  Widget _buildCard(int index, final area, HomeViewModel viewModel, BuildContext context) {
+    return Card( 
+      child: ListTile( 
+        title: Text(area['tenkhuvuc']), 
+        subtitle: Text(area['tencaytrong']), 
+        leading: 
+          Image.network("https://cdn.pixabay.com/photo/2016/10/30/18/01/apple-1783882_640.png"),
+        trailing: IconButton( 
+          icon: Icon(Icons.delete), 
+          onPressed: () { 
+            viewModel.removeArea(area['makhuvuc'], context); 
+          }, 
+        ), 
+        onTap: () { 
+          Navigator.push( 
+            context, 
+            MaterialPageRoute( 
+              builder: (context) => AreaDetailScreen(areaIndex: index,makhuvuc: area['makhuvuc'], userId: userId), 
+            ), 
+          ); 
+        }, 
+      ), 
     );
   }
 
