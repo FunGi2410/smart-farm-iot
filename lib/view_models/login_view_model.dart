@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:smart_farm_iot/constants.dart';
 import 'package:smart_farm_iot/main.dart';
 import 'dart:convert';
 
@@ -9,7 +10,7 @@ class LoginViewModel with ChangeNotifier {
 
   Future<void> loginUser(BuildContext context) async {
     final response = await http.post(
-      Uri.parse('http://192.168.1.3/doan/login.php'),
+      Uri.parse('${Constants.url}/doan/login.php'),
       body: {
         'username': usernameController.text,
         'password': passwordController.text,
@@ -28,25 +29,4 @@ class LoginViewModel with ChangeNotifier {
       );
     }
   }
-
-//   Future<void> loginUser(BuildContext context) async {
-//     final response = await http.post(
-//       Uri.parse('http://192.168.5.101/doan/login.php'),
-//       body: {
-//         'username': usernameController.text,
-//         'password': passwordController.text,
-//       },
-//     );
-//     print("Login Response Status Code: ${response.statusCode}");
-//     print("Login Response Body: ${response.body}");
-//     var data = json.decode(response.body);
-//     if (data['status'] == 'success') {
-//       Navigator.pushReplacement(
-//         context,
-//         MaterialPageRoute(builder: (context) => HomeScreen(userName: usernameController.text)),
-//       );
-//     } else {
-//       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data['message'])));
-//     }
-//   }
 }

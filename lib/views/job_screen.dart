@@ -1,40 +1,161 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_farm_iot/view_models/home_view_model.dart';
+import 'package:smart_farm_iot/view_models/job_view_model.dart';
 
 class JobScreen extends StatelessWidget {
   final int areaIndex;
+  final String makhuvuc;
+  final int userId;
 
-  JobScreen({required this.areaIndex});
+  JobScreen({required this.areaIndex, required this.makhuvuc, required this.userId});
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<HomeViewModel>(context);
-    final area = viewModel.areas[areaIndex];
+    final viewModel = Provider.of<JobViewModel>(context);
+    //final area = viewModel.areas[areaIndex];
     return Scaffold(
-      appBar: AppBar(title: Text('Công Việc')),
-      body: ListView.builder(
-        itemCount: area.jobs.length,
-        itemBuilder: (context, index) {
-          final job = area.jobs[index];
-          return Card(
-            child: ListTile(
-              title: Text(job.name),
-              subtitle: Text('${job.notes} - ${job.date.toString()}'),
-            ),
-          );
-        },
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _showAddJobDialog(context, viewModel, areaIndex);
+          _showAddJobDialog(context, viewModel);
         },
         child: Icon(Icons.add),
+      ),
+
+      body: Column(
+        children: [
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height - kBottomNavigationBarHeight,
+                decoration: const BoxDecoration(
+                  color: Colors.yellow,
+                ),
+              ),
+
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: const AssetImage("assets/imgs/top_bg.jpg"),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(1),
+                        BlendMode.dstATop,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              Positioned(
+                top: 150,
+                left: 0,
+                right: 0,
+                child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Tìm kiếm...',
+                              hintStyle:
+                                  const TextStyle(color: Color(0xFFCFCACA)),
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.8),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(90),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFCFCACA),
+                                  width: 1.0,
+                                ),
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                color: Color(0xFFCFCACA),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: FutureBuilder<List<dynamic>>(
+                            future: viewModel.getTask(userId, makhuvuc),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Center(child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Center(child: Text('Error: ${snapshot.error}'));
+                              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                return Center(child: Text('Không có công việc nào.'));
+                              } else {
+                                return ListView.builder(
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) {
+                                    var task = snapshot.data![index];
+                                    return Card(
+                                      child: ListTile(
+                                        title: Text(task['congviec'] ?? 'Chưa có tên công việc'),
+                                        subtitle: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(task['ghichu'] ?? 'Chưa có ghi chú'),
+                                            Text(
+                                              task['thoigian'],
+                                            ),
+                                          ],
+                                        ),
+                                        leading: 
+                                          Image.network("https://cdn-icons-png.flaticon.com/512/2098/2098402.png"),
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(Icons.delete),
+                                              onPressed: () => viewModel.removeTask(task['id'], context),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                        )
+                      ],
+                    )),
+              ),
+              Positioned( 
+                top: 30, 
+                left: 10, 
+                child: IconButton( 
+                  icon: Icon(Icons.arrow_back, color: Colors.white), 
+                  onPressed: () { Navigator.pop(context); }, 
+                ), 
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 
-  void _showAddJobDialog(BuildContext context, HomeViewModel viewModel, int areaIndex) {
+  void _showAddJobDialog(BuildContext context, JobViewModel viewModel) {
     final nameController = TextEditingController();
     final notesController = TextEditingController();
     DateTime selectedDate = DateTime.now();
@@ -74,13 +195,15 @@ class JobScreen extends StatelessWidget {
           actions: [
             ElevatedButton(
               onPressed: () {
-                viewModel.addJobToArea(
-                  areaIndex,
+                viewModel.addTask(
                   nameController.text,
                   notesController.text,
                   selectedDate,
+                  userId,
+                  makhuvuc,
+                  context
                 );
-                Navigator.of(context).pop();
+                //Navigator.of(context).pop();
               },
               child: Text('Lưu'),
             ),

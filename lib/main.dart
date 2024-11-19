@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_farm_iot/view_models/employee_view_model.dart';
 import 'package:smart_farm_iot/view_models/job_view_model.dart';
 import 'package:smart_farm_iot/view_models/login_view_model.dart';
 import 'package:smart_farm_iot/view_models/register_view_model.dart';
@@ -28,9 +29,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => HomeViewModel()),
-        //ChangeNotifierProvider(create: (context) => JobViewModel()),
-        ChangeNotifierProvider(create: (context) => LoginViewModel()),
+        ChangeNotifierProvider(create: (context) => JobViewModel()),
+        ChangeNotifierProvider(create: (context) => EmployeeViewModel()),
         ChangeNotifierProvider(create: (context) => RegisterViewModel()),
+        ChangeNotifierProvider(create: (context) => LoginViewModel()),
       ],
       child: MaterialApp(
         locale: DevicePreview.locale(context),

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_farm_iot/view_models/home_view_model.dart';
@@ -16,47 +15,114 @@ class AreaDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final area = Provider.of<HomeViewModel>(context).areas[areaIndex];
-    
+    //final area = Provider.of<HomeViewModel>(context).areas[areaIndex];
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(area.nameArea),
-      ),
-      body: GridView.count(
-        crossAxisCount: 2,
+      body: Column(
         children: [
-          _buildCard('Công Việc', Icons.work, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => JobScreen(areaIndex: areaIndex),
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height - kBottomNavigationBarHeight,
+                decoration: const BoxDecoration(
+                  color: Colors.yellow,
+                ),
               ),
-            );
-          }),
-          _buildCard('Điều Khiển', Icons.settings, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ControlScreen(area: area),
+
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: const AssetImage("assets/imgs/top_bg.jpg"),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(1),
+                        BlendMode.dstATop,
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            );
-          }),
-          _buildCard('Giám Sát', Icons.visibility, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MonitoringScreen(area: area),
+
+              Positioned(
+                top: 150,
+                left: 0,
+                right: 0,
+                child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
+                          child: Text("Bạn muốn làm gì?", style: TextStyle(fontSize: 30)),
+                        ),
+                        Expanded(
+                          child: GridView.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+                            children: [
+                              _buildCard('Công Việc', Icons.work, () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => JobScreen(areaIndex: areaIndex, userId: userId, makhuvuc: makhuvuc),
+                                  ),
+                                );
+                              }),
+                              _buildCard('Điều Khiển', Icons.settings, () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => JobScreen(areaIndex: areaIndex, userId: userId, makhuvuc: makhuvuc),
+                                  ),
+                                );
+                              }),
+                              _buildCard('Giám Sát', Icons.visibility, () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MonitoringScreen(userId: userId, makhuvuc: makhuvuc),
+                                  ),
+                                );
+                              }),
+                              _buildCard('Nhân Viên', Icons.people, () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EmployeeScreen(userId: userId, makhuvuc: makhuvuc),
+                                  ),
+                                );
+                              }),
+                            ],
+                          )
+                        )
+                      ],
+                    )),
               ),
-            );
-          }),
-          _buildCard('Nhân Viên', Icons.people, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EmployeeScreen(area: area),
+              Positioned( 
+                top: 30, 
+                left: 10, 
+                child: IconButton( 
+                  icon: Icon(Icons.arrow_back, color: Colors.white), 
+                  onPressed: () { Navigator.pop(context); }, 
+                ), 
               ),
-            );
-          }),
+            ],
+          ),
         ],
       ),
     );
@@ -66,13 +132,26 @@ class AreaDetailScreen extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Card(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 40),
-            SizedBox(height: 10),
-            Text(title, style: TextStyle(fontSize: 20)),
-          ],
+        shape: RoundedRectangleBorder( 
+          borderRadius: BorderRadius.circular(15.0), 
+          side: BorderSide( 
+            color: Colors.blue, // Màu của viền 
+            width: 2.0, // Độ dày của viền 
+          ), 
+        ),
+
+        color: Colors.white, // Màu nền của Card 
+        child: Container( 
+          width: 20, // Chiều rộng của Card 
+          height: 20, // Chiều cao của Card 
+          child: Column( 
+            mainAxisAlignment: MainAxisAlignment.center, 
+            children: [ 
+              Icon(icon, size: 40), 
+              SizedBox(height: 10), 
+              Text(title, style: TextStyle(fontSize: 20)), 
+            ], 
+          ), 
         ),
       ),
     );

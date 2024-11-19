@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:smart_farm_iot/constants.dart';
 import 'package:smart_farm_iot/models/device.dart';
 import 'package:smart_farm_iot/models/employee.dart';
 import 'package:smart_farm_iot/models/job.dart';
@@ -49,7 +50,7 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> removeArea(String makhuvuc, BuildContext context) async {
     final response = await http.post(
-      Uri.parse('http://192.168.1.3/doan/deletekhuvuc.php'),
+      Uri.parse('${Constants.url}/doan/deletekhuvuc.php'),
       body: {
         'makhuvuc': makhuvuc,
       },
@@ -68,7 +69,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<List> getDataArea(int userId) async {
-    final response = await http.get(Uri.parse('http://192.168.1.3/doan/getkhuvuc.php?user_id=$userId'));
+    final response = await http.get(Uri.parse('${Constants.url}/doan/getkhuvuc.php?user_id=$userId'));
 
     if (response.statusCode == 200) {
       List data = json.decode(response.body);
@@ -84,7 +85,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void addAreaToDatabase(String nameArea, String namePlant, String userId) {
-    var url = 'http://192.168.1.3/doan/addkhuvuc.php';
+    var url = '${Constants.url}/doan/addkhuvuc.php';
 
     http.post(Uri.parse(url), body: {
       'user_id': userId,

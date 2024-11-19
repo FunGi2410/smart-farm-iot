@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:smart_farm_iot/views/auth/login_screen.dart';
+import 'package:smart_farm_iot/constants.dart';
 
 class RegisterViewModel with ChangeNotifier {
   final TextEditingController usernameController = TextEditingController();
@@ -11,7 +11,7 @@ class RegisterViewModel with ChangeNotifier {
 
   Future<void> registerUser(BuildContext context) async {
     final response = await http.post(
-      Uri.parse('http://192.168.1.3/doan/register.php'),
+      Uri.parse('${Constants.url}/doan/register.php'),
       body: {
         'username': usernameController.text,
         'password': passwordController.text,
