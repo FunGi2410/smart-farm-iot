@@ -41,8 +41,33 @@ class MonitoringScreen extends StatelessWidget {
                 ),
               ),
 
+              Positioned( 
+                top: 80, 
+                left: 20, 
+                child: Text( 
+                  'Tên cây - Tên khu vực',
+                  style: TextStyle( 
+                    fontSize: 20, // Kích thước chữ lớn 
+                    color: Colors.black, // Màu trắng cho dễ đọc trên nền tối 
+                  ),
+                ), 
+              ),
+
+              Positioned( 
+                top: 110, 
+                left: 20, 
+                child: Text( 
+                  'Giám sát',
+                  style: TextStyle( 
+                    fontSize: 35, // Kích thước chữ lớn 
+                    fontWeight: FontWeight.bold, // Chữ in đậm 
+                    color: Colors.black, // Màu trắng cho dễ đọc trên nền tối 
+                  ),
+                ), 
+              ),
+
               Positioned(
-                top: 150,
+                top: 180,
                 left: 0,
                 right: 0,
                 child: Container(

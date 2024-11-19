@@ -50,8 +50,21 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
+              Positioned( 
+                top: 110, 
+                left: 10, 
+                child: Text( 
+                  'Quản lý khu vực',
+                  style: TextStyle( 
+                    fontSize: 35, // Kích thước chữ lớn 
+                    fontWeight: FontWeight.bold, // Chữ in đậm 
+                    color: Colors.black, // Màu trắng cho dễ đọc trên nền tối 
+                  ),
+                ), 
+              ),
+
               Positioned(
-                top: 150,
+                top: 180,
                 left: 0,
                 right: 0,
                 child: Container(
